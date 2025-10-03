@@ -1,0 +1,23 @@
+name: custom:prometheus-vscode-example
+version: "0.0.1"
+minDynatraceVersion: "1.318.0"
+author:
+  name: Dynatrace
+prometheus:
+- group: prometheus_example_metrics
+  metrics:
+  - key: prometheus_example_plugin_enabled
+    value: metric:prometheus_example_plugin_enabled
+    type: gauge
+  - key: prometheus_example_panics_total.count
+    value: metric:prometheus_example_panics_total
+    type: count
+  - key: prometheus_example_health_request_failures_total.count
+    value: metric:prometheus_example_health_request_failures_total
+    type: count
+  - key: prometheus_example_health_request_duration_seconds
+    value: metric:prometheus_example_health_request_duration_seconds
+    type: histogram  
+  dimensions:
+  - key: technology
+    value: const:prometheus_example
