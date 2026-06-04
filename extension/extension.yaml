@@ -1,23 +1,54 @@
+#                      Minimal Example Extension - Prometheus
+# ==================================================================================================
+# Dynatrace documentation for the data source: https://docs.dynatrace.com/docs/shortlink/prometheus-extensions-reference
+# For general extension yaml documentation: https://docs.dynatrace.com/docs/shortlink/extension-yaml
+#
+# This is a minimal example of how to ingest data. It is not meant to be comprehensive, but rather
+# provide a useful starting point to creating custom extensions.
+#
+# NOTE: For best results, work with these examples using the VS Code Dynatrace Extensions Add-On.
+# https://marketplace.visualstudio.com/items?itemName=DynatracePlatformExtensions.dynatrace-extensions
+# ==================================================================================================
+
+# Custom extensions must start with the `custom:` prefix.
 name: custom:prometheus-vscode-example
 version: "0.0.1"
 minDynatraceVersion: "1.318.0"
 author:
-  name: Dynatrace
+  # This can be the name of an organization or an actual name.
+  name: "Your Name Here"
+
+metrics:
+  - key: prometheus_example_plugin_load_percent
+    # While not required, metadata is useful for viewing metric descriptions in the UI, and allows for intelligent formatting of units in DQL Tables or dashboard charts for example.
+    # See https://docs.dynatrace.com/docs/shortlink/prometheus-extensions-reference#metric-metadata for more details.
+    metadata:
+      displayName: Load Percent
+      unit: Percent
+# This node defines the data source that will be used for gathering data.
+# For more information on the Prometheus data source, check out the Dynatrace Documentation linked in the header.
 prometheus:
 - group: prometheus_example_metrics
   metrics:
-  - key: prometheus_example_plugin_enabled
-    value: metric:prometheus_example_plugin_enabled
+  - key: prometheus_example_plugin_load_percent
+    # The metric value will be the Prometheus metric key, prefixed with `metric:`.
+    # See https://docs.dynatrace.com/docs/shortlink/prometheus-extensions-reference#metric-value for more details.
+    value: metric:prometheus_example_load_percent
+    # The Prometheus data source supports all original Prometheus metric payload formats.
+    # See https://docs.dynatrace.com/docs/shortlink/prometheus-extensions-reference#type for more details on how to ingest each type.
     type: gauge
   - key: prometheus_example_panics_total.count
     value: metric:prometheus_example_panics_total
     type: count
-  - key: prometheus_example_health_request_failures_total.count
-    value: metric:prometheus_example_health_request_failures_total
+  - key: prometheus_example_health_request_failures.count
+    value: metric:prometheus_example_health_request_failures
     type: count
   - key: prometheus_example_health_request_duration_seconds
     value: metric:prometheus_example_health_request_duration_seconds
     type: histogram  
   dimensions:
   - key: technology
+    # The `const:` keyword is also available to provide a fixed value or either a dimension or metric.
+    # However, a dimension could be defined using a label as well. 
+    # See https://docs.dynatrace.com/docs/shortlink/prometheus-extensions-reference#dimension-value for more details.
     value: const:prometheus_example
